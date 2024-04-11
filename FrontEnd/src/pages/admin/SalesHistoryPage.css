@@ -1,0 +1,76 @@
+.sales-history-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.date-group {
+    margin-bottom: 40px;
+    border-left: 4px solid #007bff;
+    padding-left: 15px;
+}
+
+.date-group h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.order-card {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.order-card h3, .order-card p, .order-card h4 {
+    margin: 10px 0;
+}
+
+.order-card p {
+    color: #666;
+    font-size: 16px;
+}
+
+h4 {
+    color: #333;
+    margin-top: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+li span {
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sales-history-container {
+        padding: 20px 10px;
+    }
+
+    .date-group {
+        padding-left: 10px;
+    }
+}

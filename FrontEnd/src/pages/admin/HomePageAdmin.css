@@ -1,0 +1,23 @@
+/* HomePageAdmin.css */
+.container {
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+a {
+    display: block;
+    margin: 20px 0;
+    color: #007bff;
+    text-decoration: dashed;
+    font-weight: bold;
+    font-size: 30px;
+    background-color: bisque;
+}
+
+a:hover {
+    text-decoration: underline;
+}

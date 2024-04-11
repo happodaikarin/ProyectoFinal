@@ -1,0 +1,80 @@
+/* Configuración básica del contenedor */
+.product-details-container {
+    font-family: Arial, sans-serif;
+    color: #333;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+  
+  h1 {
+    font-size: 24px;
+    color: #C45500; /* Un toque de color para el título del producto, similar al estilo Amazon */
+  }
+  
+  .product-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+  }
+  
+  /* Descripción del producto */
+  p {
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  
+  /* Detalles del precio */
+  strong {
+    display: block;
+    font-size: 20px;
+    color: #B12704; /* Color destacado para el precio, atrayendo atención */
+    margin: 20px 0;
+  }
+  
+  /* Contenedor de calificación por estrellas */
+  .star-rating-container {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Estilos de los botones de acción del producto */
+  .product-action-buttons {
+    text-align: center;
+  }
+  
+  .order-directly-btn,
+  .add-to-order-list-btn {
+    background-color: #f0c14b;
+    border-color: #a88734 #9c7e31 #846a29;
+    color: #111;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .order-directly-btn:hover,
+  .add-to-order-list-btn:hover {
+    background-color: #e7b933;
+  }
+  
+  /* Responsive design para asegurar la visualización adecuada en dispositivos móviles */
+  @media (max-width: 768px) {
+    .product-details-container {
+      margin: 20px 10px;
+      padding: 10px;
+    }
+  
+    h1 {
+      font-size: 20px;
+    }
+  
+    strong {
+      font-size: 18px;
+    }
+  }
+  

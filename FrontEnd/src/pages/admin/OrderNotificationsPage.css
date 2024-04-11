@@ -1,0 +1,79 @@
+/* Configuración básica del contenedor de notificaciones */
+.notification-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.notification {
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+/* Estado no leído */
+.unread {
+  background-color: #59fd00; /* Un verde claro para indicar que es una notificación no leída */
+  border-color: #badc58;
+}
+
+/* Estado leído/seleccionado */
+.clicked {
+  background-color: #f0f0f0; /* Un gris claro para notificaciones ya vistas */
+  border-color: #ddd;
+}
+
+.notification-content {
+  margin-bottom: 10px;
+}
+
+.notification-header,
+.notification-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.notification-title {
+  font-weight: bold;
+}
+
+.notification-footer {
+  text-align: center;
+  font-style: italic;
+  font-size: 0.9em;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 5px 0;
+}
+
+/* Añade estilos responsivos si es necesario */
+@media (max-width: 768px) {
+  .notification {
+    padding: 5px;
+  }
+  
+  .notification-details {
+    flex-direction: column;
+  }
+}
+
+.notification.saved {
+  background-color: #e0ffe0; /* Un verde claro para indicar que está guardado */
+}
+
+.notification.saved .notification-footer {
+  display: none; /* Opcional: Ocultar el pie de página si no quieres que se muestre el botón guardar después de guardar */
+}
