@@ -18,3 +18,4 @@ aceptaci ́on para validar la eficiencia de la aplicaci ́on web.
 El resultado de este proyecto ser ́a una aplicaci ́on web responsiva capaz de proporcionar
 recomendaciones personalizadas basadas en algoritmos de filtrado colaborativo y an ́alisis de
 patrones de consumo.
+![image](https://github.com/happodaikarin/ProyectoFinal/assets/55858871/f8628588-5ac3-4405-90bb-3199a5f9b603)
