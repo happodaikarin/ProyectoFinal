@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../../components/Navbar';
-import './SalesHistoryPage.css';
+import styles from './SalesHistoryPage.module.scss';
 
 function SalesHistoryPage() {
     const [salesHistory, setSalesHistory] = useState({});
@@ -54,28 +54,27 @@ function SalesHistoryPage() {
     if (error) {
         return <div>Error: {error}</div>;
     }
-
     return (
-        <div>
+        <div className={styles['sales-history-page']}>
             <Navbar />
-            <h1>Historial de Ventas</h1>
-            <div className="sales-history-container">
+            <h1 className={styles['page-title']}>Historial de Ventas</h1>
+            <div className={styles['sales-history-container']}>
                 {Object.entries(salesHistory).map(([date, orders]) => (
-                    <div key={date} className="date-group">
-                        <h2>Fecha: {date}</h2>
+                    <div key={date} className={styles['date-group']}>
+                        <h2 className={styles['date-title']}>Fecha: {date}</h2>
                         {orders.map((order, index) => (
-                            <div key={index} className="order-card">
-                                <h3>Pedido ID: {order.orderId}</h3>
-                                <p>Mesa Número: {order.tableNumber}</p>
-                                <p>Fecha del Pedido: {new Date(order.createdAt).toLocaleString()}</p>
-                                <p>Total: ${order.totalPrice}</p>
-                                <h4>Items del Pedido:</h4>
-                                <ul>
+                            <div key={index} className={styles['order-card']}>
+                                <h3 className={styles['order-id']}>Pedido ID: {order.orderId}</h3>
+                                <p className={styles['table-number']}>Mesa Número: {order.tableNumber}</p>
+                                <p className={styles['order-date']}>Fecha del Pedido: {new Date(order.createdAt).toLocaleString()}</p>
+                                <p className={styles['total-price']}>Total: ${order.totalPrice}</p>
+                                <h4 className={styles['items-title']}>Items del Pedido:</h4>
+                                <ul className={styles['order-items-list']}>
                                     {order.orderData.length > 0 ? order.orderData.map((item, itemIndex) => (
-                                        <li key={itemIndex}>
+                                        <li key={itemIndex} className={styles['order-item']}>
                                             {item.name} - Cantidad: {item.quantity} - Precio: ${item.price}
                                         </li>
-                                    )) : <li>No hay items en este pedido.</li>}
+                                    )) : <li className={styles['no-items']}>No hay items en este pedido.</li>}
                                 </ul>
                             </div>
                         ))}
@@ -84,6 +83,7 @@ function SalesHistoryPage() {
             </div>
         </div>
     );
+    
 }
 
 export default SalesHistoryPage;

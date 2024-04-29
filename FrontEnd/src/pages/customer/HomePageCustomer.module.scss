@@ -1,0 +1,67 @@
+    .homePageCustomer {
+        padding: 40px;  // Menos padding para dispositivos pequeños
+        background-color:  #330000  ; // Un color de fondo ligero
+        color: #fdd835;
+    }
+    
+    .catalogTitle {
+        font-size: 18px; // Tamaño más pequeño para dispositivos móviles
+        color: #fdd835;
+    }
+    
+    .categorySection {
+        margin-top: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 15px;
+        border-style: double solid  ;
+    }
+    
+    .categoryTitle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: calc(1.0188rem + .2256vw);
+    }
+    
+    .categoryButton {
+        padding: 10px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        
+        &:hover {
+        background-color: #0056b3;
+        }
+    }
+    
+    .swiperContainer {
+        margin-top: 10px;
+    }
+    
+    .productCardLink {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .productInfo {
+        padding-top: 10px;
+        text-align: center;
+    }
+    
+    .loadingText {
+        text-align: center;
+        font-size: 16px;
+    }
+    @media (max-width: 600px) {
+        .ResponsiveImage {
+          width: 100px;  // Establece el ancho fijo a 100px
+          height: 100px; // Establece la altura fija a 100px para mantener la forma cuadrada
+          object-fit: cover;  // Asegura que la imagen se cubra completamente sin distorsionar
+        }
+      }
+      
+    

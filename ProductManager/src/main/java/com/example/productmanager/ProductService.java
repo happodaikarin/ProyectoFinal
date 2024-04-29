@@ -63,8 +63,4 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void sincronizarProductoConInteracciones(Product product) {
-        final String url = "http://localhost:3030/productos/sincronizar";
-        restTemplate.postForObject(url, product, String.class);
-    }
 }

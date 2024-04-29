@@ -1,0 +1,67 @@
+/* index.scss */
+
+// Reset de estilos básicos para asegurar consistencia entre navegadores
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// Estilos básicos del cuerpo de la página
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; // Usa la fuente que prefieras
+  background-color:  #330000  ; // Un color de fondo ligero
+  color: #fdd835;
+  line-height: 1.6;
+  font-size: 16px; // Tamaño de fuente base
+  margin: 0;
+  padding: 0;
+}
+
+// Estilos para encabezados que podrías necesitar resaltar
+h1, h2, h3, h4, h5, h6,p {
+  margin: 0.5em 0;
+  font-weight: normal;
+}
+
+// Links
+a {
+  color: #007bff; // Un color azul para enlaces
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Botones y entradas de formulario para una apariencia coherente
+input, button, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+button {
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+// Contenedor principal, útil si quieres centrar tu app o agregar padding
+.container {
+  width: 100%;
+  max-width: 1200px; // Máximo ancho que prefieras
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// Añade aquí cualquier otro estilo global que necesites
+

@@ -1,122 +1,165 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { FaStar } from 'react-icons/fa';
-import './ProductDetailsPage.css';
-import Navbar from '../../components/Navbar';
-import { useAuth } from '../../context/AuthContext';
-import {jwtDecode} from 'jwt-decode';
+  // ProductDetailsPage.js
 
+  import React, { useEffect, useState } from 'react';
+  import { useParams, useNavigate } from 'react-router-dom';
+  import { FaStar } from 'react-icons/fa';
+  import styles from './ProductDetailsPage.module.scss';
+  import Navbar from '../../components/Navbar';
+  import { useAuth } from '../../context/AuthContext';
+  import { jwtDecode } from 'jwt-decode';
+  import Recommendations from './components/Recomendations'; // Importa el nuevo componente
+  import useRecommendations from './hooks/useRecommendations';  // Asegúrate de importar el hook
+  
+  
+  function ProductDetailsPage() {
+    const { productId } = useParams();
+    const navigate = useNavigate();
+    const [product, setProduct] = useState(null);
+    const [rating, setRating] = useState(null);
+    const [hover, setHover] = useState(null);
+    const { authToken } = useAuth();
+    const [orderCount, setOrderCount] = useState(0);
+    const [showOrderListButton, setShowOrderListButton] = useState(false); 
 
-function ProductDetailsPage() {
-  const { productId } = useParams();
-  const [product, setProduct] = useState(null);
-  // Utiliza el useState para inicializar el rating con el valor almacenado en localStorage si existe
-  const [rating, setRating] = useState(localStorage.getItem(`rating-${productId}`) ? parseInt(localStorage.getItem(`rating-${productId}`)) : null);
-  const [hover, setHover] = useState(null);
-  const { authToken } = useAuth();
-  let userId = null;
+    let userId = null;
+    let userNickname = null;
 
-  if (authToken) {
-    const decodedToken = jwtDecode(authToken);
-    userId = decodedToken.sub;
-  }
+    if (authToken) {
+      const decodedToken = jwtDecode(authToken);
+      userId = decodedToken.sub;
+      userNickname = decodedToken.nickname;
+    }
+    const { recommendations, fetchRecommendations } = useRecommendations(userId);
 
+    useEffect(() => {
+      fetch(`http://localhost:4948/products/${productId}`)
+        .then(response => response.json())
+        .then(data => setProduct(data))
+        .catch(error => console.error("Error fetching product details:", error));
+      setRating(null);
+    }, [productId]);
 
-  useEffect(() => {
-    fetch(`http://localhost:4948/products/${productId}`)
-      .then(response => response.json())
-      .then(data => setProduct(data))
-      .catch(error => console.error("Error fetching product details:", error));
-  }, [productId]);
+    useEffect(() => {
+      const userRating = localStorage.getItem(`rating-${productId}-${userId}`);
+      if (userRating) {
+        setRating(parseInt(userRating));
+      }
+    }, [productId, userId]);
 
-  const recordRatingInteraction = (ratingValue) => {
-    localStorage.setItem(`rating-${productId}`, ratingValue);
-    fetch('http://localhost:3030/interacciones', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id_usuario: userId,
-        id_producto: productId,
-        tipo: 'rating',
-        rating: ratingValue,
-        timestamp: new Date().toISOString(),
-      }),
-    })
-    .then(response => response.json())
-    .then(data => console.log('Rating interaction recorded:', data))
-    .catch(error => console.error('Error recording rating interaction:', error));
+    const handleRatingChange = (ratingValue) => {
+      console.log("Sending rating for", product.name);  // Añade esto para depurar
+      setRating(ratingValue);
+      localStorage.setItem(`rating-${productId}-${userId}`, ratingValue.toString());
+      // Enviar la calificación al servidor
+      if (product) {
+          fetch('http://localhost:5001/ratings', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  userId: userId,
+                  userNickname: userNickname,
+                  productId: productId,
+                  productName: product.name,  // Asegúrate de que esto no es null
+                  productCategory: product.category,                
+                  rating: ratingValue
+              }),
+          })
+          .then(response => response.json())
+          .then(data => {
+              console.log("Rating saved:", data);
+              fetchRecommendations();
+          })
+          .catch(error => console.error("Error saving rating:", error));
+      } else {
+          console.error("Product data is not loaded yet.");
+      }
   };
 
-  const recordAddToListInteraction = (productToAdd) => {
-    fetch('http://localhost:3030/interacciones', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id_usuario: userId,
-        id_producto: productToAdd.id,
-        tipo: 'añadido_a_lista',
-        timestamp: new Date().toISOString(),
-      }),
-    })
-    .then(response => response.json())
-    .then(data => console.log('Add to list interaction recorded:', data))
-    .catch(error => console.error('Error recording add to list interaction:', error));
-  };
 
   const orderProductDirectly = () => {
-    console.log("Pedido directo del producto:", product.name);
-    alert("Producto pedido directamente!");
-    // Considera agregar una llamada a una función para grabar esta interacción si es necesario
+    const existingOrderList = JSON.parse(sessionStorage.getItem("orderList")) || [];
+    const updatedOrderList = [...existingOrderList, product];
+    sessionStorage.setItem("orderList", JSON.stringify(updatedOrderList));
+    setOrderCount(updatedOrderList.length);
+    setShowOrderListButton(true);
+    
+    // Enviar interacción al servidor
+    fetch('http://localhost:5001/add-to-order', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({userId: userId, product_id: productId})
+    }).then(response => response.json())
+      .then(data => console.log("Add to order interaction saved:", data),fetchRecommendations())
+      .catch(error => console.error("Error saving add to order interaction:", error));
+      
   };
 
-  const addProductToOrderList = (productToAdd) => {
-    let orderList = JSON.parse(localStorage.getItem("orderList")) || [];
-    orderList.push(productToAdd);
-    localStorage.setItem("orderList", JSON.stringify(orderList));
-    alert("Producto añadido a la lista de pedidos");
-    recordAddToListInteraction(productToAdd); // Grabar la interacción al añadir a la lista
+
+  const orderPaced = () => {
+    const existingOrderList = JSON.parse(sessionStorage.getItem("orderList")) || [];
+    const updatedOrderList = [...existingOrderList, product];
+    sessionStorage.setItem("orderList", JSON.stringify(updatedOrderList));
+    setOrderCount(updatedOrderList.length);
+    setShowOrderListButton(true);
+    goToOrderListPage();
+    
+    // Enviar interacción al servidor
+    fetch('http://localhost:5001/order_placed', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({userId: userId, product_id: productId})
+    }).then(response => response.json())
+      .then(data => console.log("Add to order interaction saved:", data,fetchRecommendations()))
+      .catch(error => console.error("Error saving add to order interaction:", error));
   };
 
-  return (
-    <div className="product-details-container">
-      <Navbar />
-      <h1>{product?.name}</h1>
-      <img src={product?.imageUrl} alt={product?.name} className="product-image" />
-      <p>{product?.description}</p>
-      <strong>${product?.price}</strong>
-      <div className="star-rating-container">
+
+    const goToOrderListPage = () => {
+      navigate('/orderList');
+    };
+
+    return (
+      <div className={styles.productDetailsContainer}> {/* Cambio de nombre de clase */}
+      <Navbar showOrderListButton={showOrderListButton} />
+      <Recommendations userId={userId} />
+
+      <h1 className={styles.productName}>{product?.name}</h1>
+      <img src={product?.imageUrl} alt={product?.name} className={styles.productImage} />
+      <p className={styles.productDescription}>{product?.description}</p> 
+      <strong className={styles.productPrice}>${product?.price}</strong>
+      <div className={styles.starRatingContainer}> 
         {[...Array(5)].map((star, index) => {
-          const ratingValue = index + 1;
-          return (
-            <label key={index}>
-              <input
-                type="radio"
-                name="rating"
-                value={ratingValue}
-                onClick={() => {
-                  setRating(ratingValue);
-                  recordRatingInteraction(ratingValue); // Grabar la interacción de rating
-                }}
-                style={{ display: 'none' }}
-              />
-              <FaStar
-                size={40}
-                onMouseEnter={() => setHover(ratingValue)}
-                onMouseLeave={() => setHover(null)}
-                color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
-                style={{ cursor: 'pointer', marginRight: '8px' }}
-              />
-            </label>
-          );
-        })}
+            const ratingValue = index + 1;
+            return (
+              <label key={index} className={styles.starLabel}>
+                <input
+                  type="radio"
+                  name="rating"
+                  value={ratingValue}
+                  style={{ display: 'none' }}
+                  onChange={() => handleRatingChange(ratingValue)}
+                />
+                <FaStar
+                  size={40}
+                  onMouseEnter={() => setHover(ratingValue)}
+                  onMouseLeave={() => setHover(null)}
+                  color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
+                  style={{ cursor: 'pointer', marginRight: '8px' }}
+                />
+              </label>
+            );
+          })}
+        </div>
+        <div className={styles.productActionButtons}> 
+        <button onClick={orderProductDirectly} className={styles.addToOrderListBtn}>Añadir a una Lista de Pedidos</button>
+        {showOrderListButton && (
+        <button onClick={orderPaced} className={styles.finalizeOrderBtn}>Finalizar Pedido</button>             )}
+      <span className={styles.orderCount}>Items en tu pedido: {orderCount}</span> 
+              </div>
       </div>
-      <div className="product-action-buttons">
-        <button onClick={orderProductDirectly} className="order-directly-btn">Pedir Producto</button>
-        <button onClick={() => addProductToOrderList(product)} className="add-to-order-list-btn">Añadir a una Lista de Pedidos</button>
-      </div>
-    </div>
-  );
-}
+    );
+  }
 
-export default ProductDetailsPage;
-
+  export default ProductDetailsPage;

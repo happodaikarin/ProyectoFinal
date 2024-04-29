@@ -1,0 +1,69 @@
+.sales-history-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    background-color: aliceblue;
+
+  
+    .page-title {
+      color: #333;
+      margin-bottom: 20px;
+    }
+  
+    .sales-history-container {
+      width: 100%;
+      padding: 10px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+      .date-group {
+        margin-bottom: 20px;
+  
+        .date-title {
+          color: #007bff;
+          margin-bottom: 10px;
+        }
+  
+        .order-card {
+          background-color: #f9f9f9;
+          border: 1px solid #ddd;
+          padding: 15px;
+          margin-bottom: 10px;
+          border-radius: 4px;
+  
+          .order-id,
+          .table-number,
+          .order-date,
+          .total-price {
+            color: #666;
+            margin-bottom: 5px;
+          }
+  
+          .items-title {
+            color: #333;
+            margin-top: 10px;
+          }
+  
+          .order-items-list {
+            list-style-type: none;
+            padding: 0;
+  
+            .order-item {
+              background-color: #e9ecef;
+              padding: 5px;
+              margin-top: 5px;
+              border-radius: 2px;
+            }
+  
+            .no-items {
+              color: #999;
+            }
+          }
+        }
+      }
+    }
+  }
+  

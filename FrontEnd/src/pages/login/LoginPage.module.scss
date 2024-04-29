@@ -1,0 +1,73 @@
+.loginFormContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  width: 100%;
+  max-width: 320px;
+  background-color:  #330000  ; // Un color de fondo ligero
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loginTitle {
+  margin-bottom: 20px;
+  color: #fdd835;
+}
+
+.loginButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.clientButton, .adminButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #007BFF; // Azul específico para login
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.loginForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.inputLabel {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.loginInput {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.loginSubmitButton {
+  margin-top: 10px;
+  background-color: #28a745; // Verde específico para el botón de submit
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+
+  &:hover {
+    background-color: #218838;
+  }
+}

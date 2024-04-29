@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../../context/AuthContext'; // Importa el contexto de autenticación
-import { jwtDecode } from 'jwt-decode';
-import './OrderListPage.css'; // Importa el archivo CSS
+import { useAuth } from '../../context/AuthContext';
+import {jwtDecode} from 'jwt-decode'; // Correct import statement for jwt-decode
+import styles from './OrderListPage.module.scss';
 import Navbar from '../../components/Navbar';
 
-
-function OrderListPage() {
-  const { authToken } = useAuth(); // Obtén el contexto de autenticación
+function OrderListPage({ showOrderListButton }) {
+  const { authToken } = useAuth();
   const [orderList, setOrderList] = useState([]);
   const [tableNumber, setTableNumber] = useState('');
-  const [nickname, setNickname] = useState(''); // Agrega el estado para el nickname
+  const [nickname, setNickname] = useState('');
 
   useEffect(() => {
-    // Cargar la lista de pedidos desde el almacenamiento local al cargar la página
-    const loadedOrderList = JSON.parse(localStorage.getItem("orderList")) || [];
-    setOrderList(loadedOrderList);
+    const loadedOrderList = JSON.parse(sessionStorage.getItem("orderList")) || [];
+    const groupedProducts = groupProducts(loadedOrderList);
+    setOrderList(groupedProducts);
 
-    // Obtener el nickname del contexto de autenticación al cargar la página
     if (authToken) {
       try {
         const decoded = jwtDecode(authToken);
@@ -25,73 +23,84 @@ function OrderListPage() {
         console.error("Error decoding the token:", error);
       }
     }
-  }, [authToken]); // Asegúrate de incluir authToken en la lista de dependencias
+  }, [authToken]);
 
-  const removeProductFromOrderList = (indexToRemove) => {
-    // Eliminar un producto de la lista de pedidos
-    const filteredOrderList = orderList.filter((_, index) => index !== indexToRemove);
-    setOrderList(filteredOrderList);
-    localStorage.setItem("orderList", JSON.stringify(filteredOrderList));
-  };
-
-  const handlePlaceOrder = () => {
-    // Crear un nuevo pedido y enviarlo al servidor a través de WebSocket
-    const orderData = JSON.stringify({
-      orderList,
-      totalPrice: calculateTotalPrice().toString(),
-      tableNumber: tableNumber || null,
-      orderId: `order_${new Date().getTime()}`,
-      // Include the nickname in the order data
-      customerNickname: nickname
+  const groupProducts = (products) => {
+    const productMap = {};
+    products.forEach(product => {
+      const productId = product.id;
+      if (!productMap[productId]) {
+        productMap[productId] = { ...product, quantity: 1 };
+      } else {
+        productMap[productId].quantity++;
+      }
     });
-
-    const socket = new WebSocket("ws://localhost:1231");
-    socket.onopen = () => {
-      socket.send(orderData);
-      console.log("Pedido enviado:", orderData);
-      alert("Pedido realizado con éxito!");
-      setOrderList([]); // Limpiar la lista de pedidos después de enviar el pedido
-      localStorage.removeItem("orderList"); // Limpiar el almacenamiento local
-    };
+    return Object.values(productMap);
   };
+
+  const removeProductFromOrderList = (productId) => {
+    const updatedOrderList = orderList.map(product => {
+      if (product.id === productId && product.quantity > 1) {
+        return { ...product, quantity: product.quantity - 1 };
+      } else if (product.id === productId) {
+        return null;
+      }
+      return product;
+    }).filter(Boolean);
+    sessionStorage.setItem("orderList", JSON.stringify(updatedOrderList));
+    setOrderList(updatedOrderList);
+  };
+
+  const socket = new WebSocket("ws://localhost:1231");
+
+  const handlePlaceOrderClick = () => {
+    const total = calculateTotalPrice(); // Calcula el total del pedido
+  
+    const orderData = {
+      tableNumber: tableNumber, // Número de mesa
+      customerNickname: nickname, // Nombre del cliente desde el token JWT
+      totalPrice: total, // Precio total calculado
+      orderList: orderList // Lista de productos
+    };
+  
+    const orderJson = JSON.stringify(orderData); // Convertir el objeto del pedido a JSON
+    socket.send(orderJson); // Enviar el pedido a través de WebSocket
+    console.log("Pedido enviado:", orderJson);
+  
+    alert("Pedido realizado con éxito!");
+    setOrderList([]); // Limpiar la lista de pedidos después de enviar
+    sessionStorage.removeItem("orderList"); // Limpiar sessionStorage
+  };
+  
 
   const calculateTotalPrice = () => {
-    // Calcular el precio total de los productos en la lista de pedidos
-    return orderList.reduce((acc, product) => acc + product.price, 0);
-  };
-
-  const handleTableNumberChange = (e) => {
-    // Validar el número de mesa entre 1 y 10
-    const value = e.target.value;
-    if (value === '' || (parseInt(value) >= 1 && parseInt(value) <= 10)) {
-      setTableNumber(value);
-    }
+    return orderList.reduce((acc, product) => acc + (product.price * product.quantity), 0);
   };
 
   return (
-    <div className="order-list-page">
-      <Navbar />
+    <div className={styles['order-list-page']}>
+      <Navbar showOrderListButton={showOrderListButton} />
       <h1>Lista de Pedidos</h1>
-      <input  
-        type="number"
-        placeholder="Número de Mesa (opcional)"
-        value={tableNumber}
-        onChange={handleTableNumberChange} // Usa la función de validación
-        style={{ margin: "10px 0", padding: "8px" }}
-      />
+      <input
+            type="number"
+            placeholder="Número de Mesa (opcional)"
+            value={tableNumber}
+            onChange={(e) => setTableNumber(e.target.value)}
+            className={styles['input-number']}
+        />
       {orderList.length > 0 ? (
         <>
           <ul>
             {orderList.map((product, index) => (
               <li key={index}>
                 <img src={product.imageUrl} alt={product.name} style={{ width: "50px" }} />
-                {product.name} - {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(product.price)}
-                <button onClick={() => removeProductFromOrderList(index)}>Borrar</button>
+                {product.name} - {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(product.price)} x {product.quantity}
+                <button onClick={() => removeProductFromOrderList(product.id)}>Reducir</button>
               </li>
             ))}
           </ul>
           <p>Total: {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(calculateTotalPrice())}</p>
-          <button onClick={handlePlaceOrder} className="place-order-btn">Realizar Pedido</button>
+          <button onClick={handlePlaceOrderClick} className="place-order-btn">Realizar Pedido</button>
         </>
       ) : (
         <p>No hay productos en tu lista de pedidos.</p>

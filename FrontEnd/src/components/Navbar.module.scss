@@ -1,0 +1,67 @@
+.navbar {
+    display: flex;
+    flex-direction: column; // Apila los elementos verticalmente
+    align-items: center; // Alinea los elementos en el centro horizontalmente
+    padding: 10px;
+    background-color:
+    #660000 ;
+    color: white;
+    width: 100%; // Asegura que la barra de navegación use todo el ancho disponible
+    font-size:20px;
+
+    .burgerMenu {
+        display: none; // El botón de menú está oculto por defecto en pantallas grandes
+        background: none;
+        border: solid;
+        color: white;
+        font-size: 24px;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .welcomeMessage {
+        text-align: center; // Asegura que el texto esté centrado horizontalmente
+        width: 100%; // Ocupa todo el ancho para garantizar el centrado
+        padding: 10px 0; // Añade algo de espacio alrededor del mensaje
+    }
+
+    .navMenu {
+        display: flex; // Visible en pantallas grandes
+        flex-direction: row;
+        align-items: center;
+        width: 100%; // Garantiza que el menú ocupe todo el ancho disponible
+
+        .navButton {
+            margin: 10px; // Añade margen uniforme alrededor de cada botón
+        }
+    }
+
+    @media (max-width: 768px) {
+        .burgerMenu {
+            display: block; // Mostrar en pantallas pequeñas
+            margin: 0 auto; // Centra el botón horizontalmente
+        }
+    
+        .navbar {
+            flex-direction: column; // Mantiene la disposición vertical en pantallas pequeñas
+        }
+    
+        .navMenu {
+            display: none; // Oculta inicialmente los elementos del menú en pantallas pequeñas
+            flex-direction: column; // Elementos del menú en columnas
+            align-items: center; // Centra los botones en el menú
+    
+            .navButton {
+                width: 100%; // Los botones ocupan todo el ancho en pantallas pequeñas
+                margin-top: 5px;
+                margin-left: 0; // Elimina margen izquierdo
+            }
+        }
+    
+        .navMenu.showMenu {
+            display: flex; // Muestra los elementos del menú cuando el burgerMenu está activo
+        }
+    }
+    
+}

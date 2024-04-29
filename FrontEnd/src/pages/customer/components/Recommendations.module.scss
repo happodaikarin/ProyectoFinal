@@ -1,0 +1,43 @@
+.recommendations-container {
+    border-style: double solid  ;
+    .products-container {
+        .product-card {
+            width: 155px;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+
+            .product-card-link {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
+                text-decoration: none;
+                color: yellow;
+
+                img {
+                    height: 140px; // Altura fija para la imagen
+                    width: 100%; // Ancho completo
+                    object-fit: contain; // Asegura que la imagen se ajuste sin recortes
+                }
+
+                h2, p {
+                    margin: 2px 5px;
+                    text-align: center;
+                }
+
+                h2 {
+                    font-size: 12px; // Tamaño de fuente adecuado para el espacio
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                p {
+                    font-size: 11px; // Tamaño de fuente pequeño para el precio
+                }
+            }
+        }
+    }
+}
