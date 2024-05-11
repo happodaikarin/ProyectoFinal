@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ProductManagerApplication",
+            "request": "launch",
+            "mainClass": "com.example.productmanager.ProductManagerApplication",
+            "projectName": "ProductManager"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-LoginServiceApplication<LoginService>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.loginservice.LoginServiceApplication",
+            "projectName": "LoginService",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

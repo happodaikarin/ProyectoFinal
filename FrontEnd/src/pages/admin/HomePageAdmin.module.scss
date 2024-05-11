@@ -3,12 +3,12 @@
     flex-direction: column;
     align-items: center;
     padding: 20px;
-    background-color: aliceblue;
+    background-color: rgb(13, 35, 54);
 
     width: 100%; // Asegura que ocupa el ancho completo de la vista
     height: 100vh; // Asegura que ocupa toda la altura de la vista
     .dashboard-title {
-      color: #333;
+      color: #ffffff;
       margin-bottom: 20px;
     }
   
@@ -18,7 +18,7 @@
       align-items: flex-start;
   
       .link {
-        color: #007bff;
+        color: #ffffff;
         text-decoration: none;
         margin-bottom: 10px;
   

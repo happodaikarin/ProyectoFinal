@@ -4,10 +4,9 @@
     align-items: center;
     padding: 20px;
     background-color: #bdc3c7;
-
-  width: 100%; // Asegura que ocupa el ancho completo de la vista
-  height: 100vh; // Asegura que ocupa toda la altura de la vista
-  
+    height: 100vh;
+    width: 100%;
+      
     .notifications-title {
       color: #34495e;
       margin-bottom: 20px;

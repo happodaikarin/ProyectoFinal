@@ -25,8 +25,8 @@ function CategoryProducts() {
     const { recommendations, fetchRecommendations } = useRecommendations(userId);
 
     useEffect(() => {
-        fetch(`http://localhost:4948/products`)
-            .then(response => response.json())
+      fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:4948/products`)
+      .then(response => response.json())
             .then(data => {
                 const filteredProducts = data.filter(product => product.category === category);
                 setProducts(filteredProducts);
@@ -41,7 +41,7 @@ function CategoryProducts() {
         return;
       }
       console.log("Saving interaction for", userId, userNickname, product.id, product.name, product.category);
-      fetch('http://localhost:5001/interactions', {
+      fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:5001/interactions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

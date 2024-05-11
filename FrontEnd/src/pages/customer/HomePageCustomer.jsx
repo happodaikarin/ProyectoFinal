@@ -30,7 +30,7 @@ function HomePageCustomer() {
   const { recommendations, fetchRecommendations } = useRecommendations(userId);
 
   useEffect(() => {
-    fetch('http://localhost:4948/products')
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:4948/products`)
       .then(response => response.json())
       .then(data => {
         const productsWithTextIds = data.map(product => ({
@@ -54,7 +54,7 @@ function HomePageCustomer() {
       return;
     }
     console.log("Saving interaction for", userId, userNickname, product.id, product.name, product.category);
-    fetch('http://localhost:5001/interactions', {
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:5001/interactions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ function HomePageCustomer() {
 
   const saveCategoryInteraction = (category) => {
     console.log("Saving category interaction for", userId, userNickname, category);
-    fetch('http://localhost:5001/interactions/category', {
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:5001/interactions/category`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

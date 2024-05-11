@@ -193,7 +193,7 @@ def place_order(user, product, url):
     return response.status_code
 
 # Ejecuta la simulación
-url = "http://localhost:5001"  # Asegúrate que es el puerto correcto
+url = "http://192.168.18.38:5001"  # Asegúrate que es el puerto correcto
 n_interactions = 1000
 
 for _ in range(n_interactions):

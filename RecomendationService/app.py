@@ -3,8 +3,7 @@ from neo4j import GraphDatabase
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
-
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})  # Habilitar CORS para rutas que comiencen con /api/
 uri = "bolt://localhost:7687"
 user = "neo4j"
 password = "perr1toPari$"
@@ -93,7 +92,6 @@ def get_recommendations(user_id):
             RETURN rec.recommendationId AS RecommendationID, rec.recommendationName AS RecommendationName, rec.frequency AS Frequency, TOFLOAT(rec.frequency) / totalFrequency * 100 AS Percentage
             ORDER BY rec.frequency DESC
             LIMIT 10
-
             """
             result = session.run(cypher_query, user_id=user_id)
             recommendations = [{"RecommendationID": record["RecommendationID"], "Frequency": record["Frequency"], "Percentage": record["Percentage"]} for record in result]
@@ -117,4 +115,4 @@ def recommendations():
 
 #5009
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')

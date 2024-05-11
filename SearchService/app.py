@@ -6,7 +6,7 @@ import unicodedata
 import spacy
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/search*": {"origins": "*"}})  # Configura CORS para permitir todas las origines en la ruta de búsqueda
 
 # Configuración de la conexión a MySQL
 app.config['MYSQL_HOST'] = 'localhost'
@@ -61,5 +61,7 @@ def search():
         result = []
     return jsonify(result)
 
+
+#5005
 if __name__ == '__main__':
-    app.run(debug=True, port=5005)
+    app.run(debug=True, host='0.0.0.0')

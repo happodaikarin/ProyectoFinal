@@ -4,8 +4,7 @@ from neo4j import GraphDatabase
 from functools import lru_cache
 
 app = Flask(__name__)
-CORS(app)
-
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})  # Habilitar CORS para rutas que comiencen con /api/
 # Configuración del driver de Neo4j
 uri = "bolt://localhost:7687"
 user = "neo4j"
@@ -49,5 +48,6 @@ def popular_products():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+##5002
 if __name__ == '__main__':
-    app.run(port=5002, debug=True)
+    app.run(debug=True, host='0.0.0.0')

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ResponsiveImage from './components/ResponsiveImage';
 import styles from './SearchPage.module.scss';
+import Navbar from '../../components/Navbar';
+
 
 const SearchPage = () => {
   const [query, setQuery] = useState('');
@@ -14,10 +16,12 @@ const SearchPage = () => {
     setError('');
     try {
       // Asegúrate de que esta URL es correcta y apunta a tu servicio de Flask
-      const response = await fetch(`http://localhost:5005/search?q=${query}`);
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:5005/search?q=${query}`);
       if (!response.ok) {
-        throw new Error(`Error al obtener los productos: ${response.status} - ${response.statusText}`);
+        const errorText = await response.text();  // Intenta obtener el cuerpo de la respuesta como texto
+        throw new Error(`Error al obtener los productos: ${response.status} - ${errorText}`);
       }
+      
       const data = await response.json();
       if (data.length === 0) {
         setError('No se encontraron productos');
@@ -32,6 +36,8 @@ const SearchPage = () => {
 
   return (
     <div className={styles['search-container']}>
+              <Navbar />
+
       <input
         type="text"
         value={query}
@@ -53,7 +59,7 @@ const SearchPage = () => {
               </Link>
             </div>
           ))
-        ) : (!loading && <p>No se encontraron productos con el término de búsqueda.</p>)}
+        ) : (!loading)}
       </div>
     </div>
   );

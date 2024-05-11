@@ -15,7 +15,7 @@ function OrderListPage({ showOrderListButton }) {
     const groupedProducts = groupProducts(loadedOrderList);
     setOrderList(groupedProducts);
 
-    if (authToken) {
+    if (authToken) {  
       try {
         const decoded = jwtDecode(authToken);
         setNickname(decoded.nickname);
@@ -51,26 +51,31 @@ function OrderListPage({ showOrderListButton }) {
     setOrderList(updatedOrderList);
   };
 
-  const socket = new WebSocket("ws://localhost:1231");
+  const socket = new WebSocket(`${import.meta.env.VITE_REACT_APP_API_URL2}:1231`);
 
   const handlePlaceOrderClick = () => {
-    const total = calculateTotalPrice(); // Calcula el total del pedido
+    const total = calculateTotalPrice();
+    let tableNum = tableNumber ? parseInt(tableNumber) : null;
+    if (isNaN(tableNum)) {
+      tableNum = null;
+    }
   
     const orderData = {
-      tableNumber: tableNumber, // Número de mesa
-      customerNickname: nickname, // Nombre del cliente desde el token JWT
-      totalPrice: total, // Precio total calculado
-      orderList: orderList // Lista de productos
+      tableNumber: tableNum, // Asegúrate de que es null si es necesario
+      customerNickname: nickname,
+      totalPrice: total,
+      orderList: orderList
     };
   
-    const orderJson = JSON.stringify(orderData); // Convertir el objeto del pedido a JSON
-    socket.send(orderJson); // Enviar el pedido a través de WebSocket
+    const orderJson = JSON.stringify(orderData);
+    socket.send(orderJson);
     console.log("Pedido enviado:", orderJson);
   
     alert("Pedido realizado con éxito!");
-    setOrderList([]); // Limpiar la lista de pedidos después de enviar
-    sessionStorage.removeItem("orderList"); // Limpiar sessionStorage
+    setOrderList([]);
+    sessionStorage.removeItem("orderList");
   };
+  
   
 
   const calculateTotalPrice = () => {

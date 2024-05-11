@@ -30,8 +30,8 @@ function LoginPage() {
         };
     
         try {
-            const response = await fetch('http://localhost:8080/auth/login', requestOptions);
-            if (response.ok) {
+            const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:8080/auth/login`, requestOptions);
+               if (response.ok) {
                 const data = await response.json();
                 const token = data.token; // Asume que la respuesta del servidor incluye el token aquí
                 login(token); // Función para manejar el estado del login, ajusta según tu implementación

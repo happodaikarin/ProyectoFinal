@@ -11,7 +11,7 @@ function PopularProducts() {
   useEffect(() => {
     const fetchPopularProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5002/api/popular-products');
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:5002/api/popular-products`);
         const data = await response.json();
         setPopularProducts(data.slice(0, 10));
       } catch (error) {
@@ -21,7 +21,7 @@ function PopularProducts() {
 
     const fetchProductDetails = async () => {
       try {
-        const response = await fetch('http://localhost:4948/products');
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:4948/products`);
         const data = await response.json();
         const detailsMap = data.reduce((map, product) => {
           map[product.id] = product;

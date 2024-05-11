@@ -13,7 +13,7 @@
       }, []);
 
       const fetchProducts = () => {
-        fetch('http://localhost:4948/products')
+        fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:4948/products`)
           .then(response => response.json())
           .then(data => {
             console.log("Productos:", data);
@@ -31,8 +31,8 @@
         e.preventDefault();
         const method = selectedProduct.id ? 'PUT' : 'POST';
         const endpoint = selectedProduct.id
-          ? `http://localhost:4948/products/${selectedProduct.id}`
-          : 'http://localhost:4948/products';
+          ? `${import.meta.env.VITE_REACT_APP_API_URL}:4948/products/${selectedProduct.id}`
+          : `${import.meta.env.VITE_REACT_APP_API_URL}:4948/products`;
 
         fetch(endpoint, {
           method,
@@ -57,7 +57,7 @@
       };
 
       const handleDelete = (id) => {
-        fetch(`http://localhost:4948/products/${id}`, {
+        fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:4948/products/${id}`, {
           method: 'DELETE',
         })
           .then(() => {
