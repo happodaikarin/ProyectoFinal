@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ResponsiveImage2 from './ResponsiveImage2';
 import styles from './PopularProducts.module.scss';
 
-function PopularProducts() {
+function PopularProducts({ userId, userNickname, fetchRecommendations }) {
   const [popularProducts, setPopularProducts] = useState([]);
   const [productDetails, setProductDetails] = useState({});
 
@@ -36,32 +36,55 @@ function PopularProducts() {
     fetchPopularProducts();
     fetchProductDetails();
   }, []);
+
+  const saveInteraction = (product) => {
+    if (!product) {
+      console.error("Product data is undefined.");
+      return;
+    }
+    console.log("Saving interaction for", {
+      userId,
+      userNickname,
+      productId: product.idProducto,
+      productName: productDetails[product.idProducto]?.name,
+      productCategory: productDetails[product.idProducto]?.category,
+    });
+
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:5001/interactions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: userId,
+        userNickname: userNickname,
+        productId: product.idProducto,
+        productName: productDetails[product.idProducto]?.name,
+        productCategory: productDetails[product.idProducto]?.category,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Interaction saved:", data);
+        fetchRecommendations(); // Actualizar recomendaciones tras guardar la interacción
+      })
+      .catch(error => console.error("Error saving interaction:", error));
+  };
+
   return (
     <div className={styles['popular-products']}>
       <h2>Productos Populares</h2>
       <div className={styles['popular-products-container']}>
-      <Swiper
-  spaceBetween={50}
-  slidesPerView={3} // predeterminado para pantallas más grandes
-  className={styles.swiperContainer}
-  breakpoints={{
-    // Cuando el ancho de la ventana es >= 320px
-    320: {
-      slidesPerView: 2, // 2 slides en vez de 3 para pantallas pequeñas
-      spaceBetween: 20  // Puedes ajustar el espacio entre slides si es necesario
-    },
-    // Cuando el ancho de la ventana es >= 768px
-    768: {
-      slidesPerView: 3,
-      spaceBetween: 30
-    },
-    // Cuando el ancho de la ventana es >= 1024px
-    1024: {
-      slidesPerView: 3,
-      spaceBetween: 50
-    }
-  }}
->     
+        <Swiper
+          spaceBetween={50}
+          slidesPerView={3} // predeterminado para pantallas más grandes
+          className={styles.swiperContainer}
+          breakpoints={{
+            320: { slidesPerView: 2, spaceBetween: 20 },
+            768: { slidesPerView: 3, spaceBetween: 30 },
+            1024: { slidesPerView: 3, spaceBetween: 50 }
+          }}
+        >
           {popularProducts.map(product => (
             <SwiperSlide key={product.idProducto} className={styles['popular-product-card']}>
               <Link to={`/productDetails/${product.idProducto}`} className={styles['popular-product-card-link']} onClick={() => saveInteraction(product)}>
@@ -74,7 +97,6 @@ function PopularProducts() {
       </div>
     </div>
   );
-  
 }
 
 export default PopularProducts;

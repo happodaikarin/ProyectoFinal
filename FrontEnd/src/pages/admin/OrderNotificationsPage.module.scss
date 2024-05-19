@@ -1,24 +1,26 @@
+// src/pages/admin/OrderNotificationsPage.module.scss
 .notification-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    background-color: #bdc3c7;
-    height: 100vh;
-    width: 100%;
-      
-    .notifications-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #bdc3c7;
+  height: 100vmax;
+  width: 100%;
+    
+  .notifications-title {
       color: #34495e;
       margin-bottom: 20px;
-    }
-  
-    .welcome-message {
+  }
+
+  .welcome-message {
       margin-bottom: 10px;
       color: #2c3e50;
       font-size: 16px;
-    }
-  
-    .notification {
+  }
+
+  .notification {
+      width: 550px; // Anchura fija para las notificaciones
       border: 1px solid #bdc3c7;
       border-radius: 4px;
       padding: 15px;
@@ -27,83 +29,82 @@
       cursor: pointer;
       transition: background-color 0.3s;
       color: #34495e;
-  
+      word-wrap: break-word; // Ajustar el texto largo
+
       &.clicked {
-        background-color: #dfe6e9;
+          background-color: #dfe6e9;
       }
-  
+
       &.unread {
-        background-color: #d1f2eb;
+          background-color: #d1f2eb;
       }
-  
+
       &.saved {
-        background-color: #d6eaf8;
+          background-color: #d6eaf8;
       }
-  
+
       .notification-content {
-        .notification-header {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 10px;
-  
-          .notification-title {
-            font-weight: bold;
+          .notification-header {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 10px;
+
+              .notification-title {
+                  font-weight: bold;
+              }
           }
-        }
-  
-        .notification-details {
-          font-size: 14px;
-          margin-bottom: 5px;
-  
-          span {
-            font-weight: bold;
+
+          .notification-details {
+              font-size: 14px;
+              margin-bottom: 5px;
+
+              span {
+                  font-weight: bold;
+              }
           }
-        }
-  
-        .order-list {
-          list-style: none;
-          padding-left: 0;
-  
-          .order-item {
-            margin-bottom: 5px;
+
+          .order-list {
+              list-style: none;
+              padding-left: 0;
+
+              .order-item {
+                  margin-bottom: 5px;
+              }
           }
-        }
       }
-  
+
       .notification-footer {
-        display: flex;
-        justify-content: flex-end;
-  
-        button {
-          padding: 8px 12px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          margin-left: 10px; // This can be removed if setting via inline style in JSX
-  
-          &:first-child {
-            margin-left: 0;
+          display: flex;
+          justify-content: flex-end;
+
+          button {
+              padding: 8px 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+
+              &:first-child {
+                  margin-left: 0;
+              }
+
+              &.save-button {
+                  background-color: #2ecc71;
+                  color: white;
+
+                  &:hover {
+                      background-color: #27ae60;
+                  }
+              }
+
+              &.delete-button {
+                  background-color: #e74c3c;
+                  color: white;
+
+                  &:hover {
+                      background-color: #c0392b;
+                  }
+              }
           }
-  
-          &.save-button {
-            background-color: #2ecc71;
-            color: white;
-  
-            &:hover {
-              background-color: #27ae60;
-            }
-          }
-  
-          &.delete-button {
-            background-color: #e74c3c;
-            color: white;
-  
-            &:hover {
-              background-color: #c0392b;
-            }
-          }
-        }
       }
-    }
   }
-  
+}

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import ResponsiveImage2 from './ResponsiveImage2';
 import styles from './Recommendations.module.scss';
 
-function Recommendations({ userId }) {
+function Recommendations({ userId, userNickname, fetchRecommendations }) {
   const [recommendations, setRecommendations] = useState([]);
   const [productDetails, setProductDetails] = useState({});
 
@@ -32,6 +32,40 @@ function Recommendations({ userId }) {
     fetchRecommendationsAndProductDetails();
   }, [userId]);
 
+  const saveInteraction = (product) => {
+    if (!product) {
+      console.error("Product data is undefined.");
+      return;
+    }
+    console.log("Saving interaction for", {
+      userId,
+      userNickname,
+      productId: product.idProducto,
+      productName: productDetails[product.idProducto]?.name,
+      productCategory: productDetails[product.idProducto]?.category,
+    });
+
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:5001/interactions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: userId,
+        userNickname: userNickname,
+        productId: product.id,
+        productName: product.name,
+        productCategory: product.category,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Interaction saved:", data);
+        fetchRecommendations(); // Actualizar recomendaciones tras guardar la interacción
+      })
+      .catch(error => console.error("Error saving interaction:", error));
+  };
+
   return (
     <div className={styles['recommendations-container']}>
       <h2>Productos recomendados para ti</h2>
@@ -55,11 +89,15 @@ function Recommendations({ userId }) {
                 spaceBetween: 50
               }
             }}
-          >   
+          >
             {recommendations.map((rec, index) => (
               <SwiperSlide key={`${rec.RecommendationID}-${index}`} className={styles['product-card']}>
                 {productDetails[rec.RecommendationID] ? (
-                  <Link to={`/productDetails/${rec.RecommendationID}`} className={styles['product-card-link']}>
+                  <Link
+                    to={`/productDetails/${rec.RecommendationID}`}
+                    className={styles['product-card-link']}
+                    onClick={() => saveInteraction(productDetails[rec.RecommendationID])}
+                  >
                     <ResponsiveImage2 src={productDetails[rec.RecommendationID]?.imageUrl} alt={productDetails[rec.RecommendationID]?.name} />
                     <h2>{productDetails[rec.RecommendationID]?.name}</h2>
                   </Link>

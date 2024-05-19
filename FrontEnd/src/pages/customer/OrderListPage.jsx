@@ -64,7 +64,8 @@ function OrderListPage({ showOrderListButton }) {
       tableNumber: tableNum, // Asegúrate de que es null si es necesario
       customerNickname: nickname,
       totalPrice: total,
-      orderList: orderList
+      orderList: orderList,
+      createdAt: new Date().toISOString() // Agregar marca de tiempo
     };
   
     const orderJson = JSON.stringify(orderData);

@@ -32,11 +32,12 @@ function SalesHistoryPage() {
                             }
                         }
 
-                        // Agrupa los pedidos por fecha
+                        // Agrupa los pedidos por fecha y calcula el total de ventas por fecha
                         if (!acc[date]) {
-                            acc[date] = [];
+                            acc[date] = { orders: [], totalSales: 0 };
                         }
-                        acc[date].push({ ...order, orderData: orderItems });
+                        acc[date].orders.push({ ...order, orderData: orderItems });
+                        acc[date].totalSales += order.totalPrice;
                         return acc;
                     }, {});
 
@@ -55,25 +56,30 @@ function SalesHistoryPage() {
         return <div>Error: {error}</div>;
     }
 
+    const formatCurrency = (amount) => {
+        return amount.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
+    };
+
     return (
         <div className={styles.salesHistoryPage}> {/* Usamos el objeto styles para acceder a las clases SCSS */}
             <Navbar />
             <h1>Historial de Ventas</h1>
             <div className={styles['sales-history-container']}> {/* Usamos corchetes para acceder a clases con guiones */}
-                {Object.entries(salesHistory).map(([date, orders]) => (
+                {Object.entries(salesHistory).map(([date, { orders, totalSales }]) => (
                     <div key={date} className={styles['date-group']}> {/* Usamos corchetes para acceder a clases con guiones */}
                         <h2>Fecha: {date}</h2>
+                        <h3>Total de Ventas: {formatCurrency(totalSales)}</h3>
                         {orders.map((order, index) => (
                             <div key={index} className={styles['order-card']}> {/* Usamos corchetes para acceder a clases con guiones */}
                                 <h3>Pedido ID: {order.orderId}</h3>
                                 <p>Mesa Número: {order.tableNumber}</p>
                                 <p>Fecha del Pedido: {new Date(order.createdAt).toLocaleString()}</p>
-                                <p>Total: ${order.totalPrice}</p>
+                                <p>Total: {formatCurrency(order.totalPrice)}</p>
                                 <h4>Items del Pedido:</h4>
                                 <ul>
                                     {order.orderData.length > 0 ? order.orderData.map((item, itemIndex) => (
                                         <li key={itemIndex}>
-                                            {item.name} - Cantidad: {item.quantity} - Precio: ${item.price}
+                                            {item.name} - Cantidad: {item.quantity} - Precio: {formatCurrency(item.price)}
                                         </li>
                                     )) : <li>No hay items en este pedido.</li>}
                                 </ul>

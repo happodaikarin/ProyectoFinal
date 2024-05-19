@@ -11,7 +11,6 @@ user = "neo4j"
 password = "perr1toPari$"
 driver = GraphDatabase.driver(uri, auth=(user, password))
 
-@lru_cache(maxsize=32)  # Implementa caché para la función
 def get_popular_products():
     query = """
     MATCH (p:Product)-[:BELONGS_TO]->(c:Category)
@@ -44,6 +43,7 @@ def get_popular_products():
 def popular_products():
     try:
         products = get_popular_products()
+        print("Products fetched from Neo4j:", products)  # Log de productos
         return jsonify(products)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -48,9 +48,9 @@ def create_interaction(tx, user_id, user_nickname, product_id, product_name, pro
     ON MATCH SET r.count = r.count + 1, r.timestamp = $timestamp
     """
     tx.run(query, {
-        'user_id': user_id,
+        'user_id': str(user_id),
         'user_nickname': user_nickname,
-        'product_id': product_id,
+        'product_id': str(product_id),
         'product_name': product_name,
         'product_category': product_category,
         'timestamp': timestamp
@@ -172,10 +172,11 @@ def order_placed():
 def create_order_placed(tx, user_id, product_id):
     timestamp = datetime.now().timestamp()
     query = """
-    MATCH (u:User {id: $user_id}), (p:Product {id: $product_id})
+    MATCH (u:User {id: $user_id})-[r:ADDED_TO_ORDER]->(p:Product {id: $product_id})
+    WITH u, p, r.count AS added_count
     MERGE (u)-[orderPlaced:ORDER_PLACED]->(p)
-    ON CREATE SET orderPlaced.count = 1, orderPlaced.timestamp = $timestamp
-    ON MATCH SET orderPlaced.count = orderPlaced.count + 1, orderPlaced.timestamp = $timestamp
+    ON CREATE SET orderPlaced.count = added_count, orderPlaced.timestamp = $timestamp
+    ON MATCH SET orderPlaced.count = orderPlaced.count + added_count, orderPlaced.timestamp = $timestamp
     """
     tx.run(query, user_id=user_id, product_id=product_id, timestamp=timestamp)
 

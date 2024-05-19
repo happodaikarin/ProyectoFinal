@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(bodyParser.json());
-const allowedOrigins = ['http://192.168.18.38:5173', 'http://otroOrigenPermitido.com'];
+const allowedOrigins = ['http://192.168.18.38:5173','http://192.168.18.38', 'http://otroOrigenPermitido.com','http://192.168.1.9:5173','http://192.168.1.9'];
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.indexOf(origin) !== -1) {
@@ -53,29 +53,27 @@ wss.on('connection', ws => {
 });
 
 app.post('/api/sales-history', (req, res) => {
-  const { orderId, tableNumber, totalPrice, orderData, customerNickname } = req.body;
-  const orderDataString = JSON.stringify(orderData);
-  const query = 'INSERT INTO sales_history (orderId, tableNumber, totalPrice, orderData, customerNickname) VALUES (?, ?, ?, ?, ?)';
-
-  db.query(query, [orderId, tableNumber, totalPrice, orderDataString, customerNickname], (err, results) => {
+    const { orderId, tableNumber, totalPrice, orderData, customerNickname, createdAt } = req.body;
+    const orderDataString = JSON.stringify(orderData);
+    const query = 'INSERT INTO sales_history (orderId, tableNumber, totalPrice, orderData, customerNickname, orderDate) VALUES (?, ?, ?, ?, ?, ?)';
+  
+    db.query(query, [orderId, tableNumber, totalPrice, orderDataString, customerNickname, createdAt], (err, results) => {
       if (err) {
-          console.error('Failed to insert into database:', err);
-          // Send more detailed error information
-          return res.status(500).send({
-              error: 'Failed to insert the order into sales history',
-              message: err.sqlMessage,  // This provides SQL error details
-              code: err.code           // SQL error code
-          });
+        console.error('Failed to insert into database:', err);
+        return res.status(500).send({
+          error: 'Failed to insert the order into sales history',
+          message: err.sqlMessage,  // This provides SQL error details
+          code: err.code           // SQL error code
+        });
       }
       console.log('Order successfully inserted into sales history with ID:', results.insertId);
       res.status(200).send({
-          message: 'Order successfully saved to sales history',
-          insertId: results.insertId
+        message: 'Order successfully saved to sales history',
+        insertId: results.insertId
       });
+    });
   });
-});
-
-
+  
 app.get('/api/sales-history', (req, res) => {
     db.query('SELECT * FROM sales_history', (err, results) => {
         if (err) {

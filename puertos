@@ -5,3 +5,10 @@ orderService: node websocket-server.js
 recomentationService: flask run --host=192.168.18.38 --port=5009
 searcheservice:  flask run  --host=192.168
 .18.38 --port=5005
+
+
+interacciones : flask run --host=192.168.1.9 --port=5001
+popular service : flask run   --host=192.168.1.9  --port=5002
+orderService: node websocket-server.js 
+recomentationService: flask run --host=192.168.1.9 --port=5009
+searcheservice:  flask run  --host=192.168.1.9 --port=5005

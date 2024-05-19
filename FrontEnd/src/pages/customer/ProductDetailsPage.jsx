@@ -97,10 +97,12 @@ function ProductDetailsPage() {
   };
 
   const orderPlaced = () => {
+    const orderDate = new Date().toISOString(); // Obtiene la fecha actual en formato ISO8601
+  
     fetch(`${import.meta.env.VITE_REACT_APP_API_URL}:5001/order_placed`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: userId, product_id: productId })
+      body: JSON.stringify({ userId: userId, product_id: productId, orderDate: orderDate }) // Envía la fecha del pedido al servidor
     })
       .then(response => response.json())
       .then(data => {
@@ -115,6 +117,7 @@ function ProductDetailsPage() {
         goToOrderListPage(); // Navegar a la página de lista de pedidos
       });
   };
+  
   
   const goToOrderListPage = () => {
     navigate('/orderList');
@@ -158,8 +161,9 @@ function ProductDetailsPage() {
         {showOrderListButton && (
           <button onClick={orderPlaced} className={styles.finalizeOrderBtn}>Finalizar Pedido</button>
         )}
-        <span className={styles.orderCount}>Items en tu pedido: {orderCount}</span>
-      </div>
+  {orderCount > 0 && (
+          <span className={styles.orderCount}>Items en tu pedido: {orderCount}</span>
+        )}      </div>
     </div>
   );
 }
