@@ -1,21 +1,12 @@
 # ProyectoFinal
 DESARROLLO DE UN SOFTWARE ORIENTADO AL CLIENTE PARA LA SELECCION DE PEDIDOS  ́  MEDIANTE RECOMENDACIONES INTELIGENTES PARA BEER &amp; COFFEE  COMPANY
 
-Este anteproyecto aborda el desarrollo de un software orientado al cliente, espec ́ıficamen-
-te una aplicaci ́on web, destinada a facilitar la selecci ́on de pedidos para BEER & COFFEE
+Este proyecto se centra en el desarrollo de una aplicación web destinada a mejorar la experiencia de selección de pedidos en Beer & Coffee Company. El establecimiento, conocido por su amplia variedad de cervezas artesanales y bebidas de café, enfrenta un desafío debido a la extensa gama de opciones disponibles, lo que dificulta la toma de decisiones de los clientes y reduce su satisfacción. La aplicación busca simplificar el proceso de elección mediante la implementación de un sistema de recomendaciones basado en filtrado colaborativo. Este sistema sugiere productos a los usuarios basándose en sus interacciones previas y en las preferencias de otros clientes con gustos similares. Para lograr esto, se utiliza una base de datos de grafos (Neo4j), que permite registrar y analizar las interacciones entre usuarios y productos. El algoritmo de filtrado colaborativo empleado se adapta para identificar usuarios con patrones de comportamiento similares y recomendar productos que estos han disfrutado.
 
-COMPANY. Este negocio se caracteriza por ofrecer una variedad de comidas y bebidas. El
-enfoque principal es implementar un sistema de recomendaci ́on que analizar ́a el historial de
+La arquitectura de la aplicación se basa en microservicios. Los servicios incluyen autenticación, gestión de productos, búsqueda, gestión de pedidos, interacciones y recomendaciones. Cada servicio opera de manera independiente y se comunica a través de APIs, facilitando la actualización y el escalado del sistema sin afectar otros componentes. El uso de Nginx como API Gateway centraliza la gestión del tráfico y optimiza el rendimiento general. El desarrollo del proyecto siguió una metodología ágil, con etapas definidas: recolección de requisitos, diseño del sistema, desarrollo e implementación, despliegue y pruebas.
 
-pedidos del cliente y, mediante la utilizaci ́on de algoritmos de filtrado colaborativo, propor-
-cionar ́a recomendaciones que ayudar ́an al cliente a hacer su pedido.
+En la fase de diseño del sistema, se crearon mockups para la interfaz de usuario, y se diseñaron la arquitectura del sistema y el modelo de datos. La fase de desarrollo e implementación involucró el desarrollo concurrente del frontend y backend. El despliegue de la aplicación se realizó en un entorno de prueba, utilizando Docker y Ngrok para facilitar el acceso y pruebas de los usuarios. La configuración de Docker permitió la contenedorización de los servicios, asegurando una implementación consistente y eficiente. Ngrok se utilizó para exponer localmente la aplicación y realizar pruebas remotas.
 
-La investigaci ́on consistir ́a en el dise ̃no de una base de datos y una arquitectura de sis-
-tema, la creaci ́on de una interfaz de usuario intuitiva, el empleo de algoritmos de filtrado
+Finalmente, se llevaron a cabo pruebas de usabilidad y comportamiento con usuarios. Estas pruebas tuvieron como objetivo evaluar y validar el sistema, identificando áreas de mejora y asegurando que la aplicación cumpliera con las expectativas de los usuarios. Se realizaron encuestas, donde se recopiló retroalimentación directa sobre la experiencia del usuario, la funcionalidad del sistema y la efectividad de las recomendaciones.
 
-colaborativo para un sistema de recomendaci ́on, y la realizaci ́on de pruebas de usabilidad y
-aceptaci ́on para validar la eficiencia de la aplicaci ́on web.
-El resultado de este proyecto ser ́a una aplicaci ́on web responsiva capaz de proporcionar
-recomendaciones personalizadas basadas en algoritmos de filtrado colaborativo y an ́alisis de
-patrones de consumo.
 ![image](https://github.com/happodaikarin/ProyectoFinal/assets/55858871/f8628588-5ac3-4405-90bb-3199a5f9b603)
